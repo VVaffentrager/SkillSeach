@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тема форума | SkillSearch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">SkillSearch</div>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="forum.html">Форум</a>
+                <a href="#howItWorks">Как это работает</a>
+                <div class="auth-container">
+                    <a href="#" class="auth-btn" id="showAuthForm">Войти</a>
+                    <a href="profile.html" class="auth-btn profile-btn" style="display: none;">Профиль</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="topic-section">
+            <div class="container">
+                <a href="forum.html" class="back-link">← Назад к форуму</a>
+                
+                <div class="topic-header">
+                    <h1 id="topicTitle">Название темы</h1>
+                    <div class="topic-meta">
+                        <span class="topic-author" id="topicAuthor">Автор</span>
+                        <span class="topic-date" id="topicDate">Дата</span>
+                        <span class="topic-category" id="topicCategory">Категория</span>
+                    </div>
+                </div>
+
+                <div class="topic-content" id="topicContent">
+                    <p>Содержание темы...</p>
+                </div>
+
+                <div class="replies">
+                    <h2>Ответы</h2>
+                    <div class="replies-list" id="repliesList">
+                        <!-- Ответы будут загружаться через JS -->
+                    </div>
+
+                    <div class="reply-form">
+                        <h3>Оставить ответ</h3>
+                        <form id="replyForm">
+                            <textarea id="replyContent" rows="4" placeholder="Ваш ответ..." required></textarea>
+                            <button type="submit" class="cta-btn">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="full-width-footer">
+            <div class="container">
+                <p>© 2025 SkillSearch. Обмен навыками.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

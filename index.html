@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSearch</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Подключение sql.js через CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script>
+        window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">SkillSearch</div>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="skills.html">Навыки</a>
+                <a href="forum.html">Форум</a>
+                <a href="#howItWorks">Как это работает</a>
+                <a href="#" class="auth-btn" id="showAuthForm">Войти</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Обменивайтесь навыками бесплатно</h1>
+                <p>Находите людей для обмена знаниями и умениями</p>
+                <div class="hero-buttons">
+                    <a href="forum.html" class="cta-btn">Перейти на форум</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="full-width-footer">
+            <div class="container">
+                <p>© 2025 SkillSearch. Обмен навыками.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Подключение script.js с модулями -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

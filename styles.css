@@ -1,0 +1,1164 @@
+/* Общие стили */
+:root {
+    --primary-color: #4a6bff;
+    --primary-hover: #3a5bef;
+    --secondary-color: #6c757d;
+    --secondary-hover: #5a6268;
+    --danger-color: #ff4d4d;
+    --danger-hover: #e04444;
+    --success-color: #28a745;
+    --success-hover: #218838;
+    --text-color: #333;
+    --text-secondary: #666;
+    --light-gray: #f8f9fa;
+    --border-color: #ddd;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --shadow-hover: 0 5px 15px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+}
+
+.cta-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.cta-btn:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: var(--secondary-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+.danger-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.danger-btn:hover {
+    background-color: var(--danger-hover);
+}
+
+.success-btn {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.success-btn:hover {
+    background-color: var(--success-hover);
+}
+
+/* Шапка */
+header {
+    background-color: white;
+    box-shadow: var(--shadow);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+nav a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+nav a:hover {
+    color: var(--primary-color);
+}
+
+.auth-btn {
+    background-color: var(--primary-color);
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.auth-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-avatar .avatar-placeholder {
+    font-size: 18px;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* Основное содержимое */
+main {
+    flex: 1;
+    padding: 40px 0;
+}
+
+/* Герой-баннер */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 100px 0;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Как это работает */
+.how-it-works {
+    padding: 80px 0;
+    background-color: white;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2rem;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.step {
+    text-align: center;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: var(--light-gray);
+    transition: var(--transition);
+}
+
+.step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 auto 20px;
+}
+
+.step h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.step p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Страница навыков */
+.skills-section {
+    padding: 40px 0;
+}
+
+.skills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.search-box input {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-box button {
+    padding: 0 20px;
+    background-color: var(--primary-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.search-box button:hover {
+    background-color: var(--primary-hover);
+}
+
+.category-filter {
+    position: relative;
+    min-width: 200px;
+    flex: 1;
+}
+
+.category-filter select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: white;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.category-filter::after {
+    content: "▼";
+    font-size: 12px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--text-secondary);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.skill-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.skill-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.skill-card h3 {
+    margin-bottom: 10px;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.skill-card p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.skill-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.skill-category {
+    background-color: var(--light-gray);
+    color: var(--text-secondary);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.contact-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.contact-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+/* Форум */
+.forum-section {
+    padding: 40px 0;
+}
+
+.forum-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.forum-categories {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.category {
+    padding: 8px 15px;
+    background-color: var(--light-gray);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    border: none;
+    outline: none;
+}
+
+.category.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.category:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.topic {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.topic:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.topic-main {
+    flex: 1;
+}
+
+.topic h3 {
+    margin-bottom: 10px;
+}
+
+.topic h3 a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.topic h3 a:hover {
+    color: var(--primary-color);
+}
+
+.topic-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.topic-category {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.topic-category.learning {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.topic-category.questions {
+    background-color: #fff8e1;
+    color: #ff8f00;
+}
+
+.topic-category.suggestions {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.topic-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+.create-topic-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin-top: 30px;
+    display: none;
+}
+
+.create-topic-form h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.no-topics {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+/* Страница темы */
+.topic-section {
+    padding: 40px 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.topic-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.topic-header h1 {
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+.topic-meta {
+    display: flex;
+    gap: 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.topic-content {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.replies h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.replies-list {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.reply {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.reply-author {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.reply-date {
+    color: var(--text-secondary);
+}
+
+.reply-content {
+    line-height: 1.6;
+}
+
+.reply-form {
+    margin-top: 30px;
+}
+
+.reply-form h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.reply-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.no-replies {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+}
+
+/* Страница профиля */
+.profile-section {
+    padding: 40px 0;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.avatar-upload {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    font-size: 60px;
+}
+
+.avatar-upload-btn {
+    padding: 8px 15px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    border: none;
+}
+
+.avatar-upload-btn:hover {
+    background-color: var(--secondary-hover);
+}
+
+#avatarInput {
+    display: none;
+}
+
+.profile-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.profile-about {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.profile-about h2 {
+    margin-bottom: 20px;
+}
+
+.profile-about textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    min-height: 100px;
+    margin-bottom: 15px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.profile-skills {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.profile-skills h2 {
+    margin-bottom: 20px;
+}
+
+.skills-list {
+    margin-bottom: 20px;
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--light-gray);
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.remove-skill {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 5px;
+    transition: var(--transition);
+}
+
+.remove-skill:hover {
+    transform: scale(1.2);
+}
+
+.add-skill {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.add-skill input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.add-skill button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.add-skill button:hover {
+    background-color: var(--primary-hover);
+}
+
+.profile-settings {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.profile-settings h2 {
+    margin-bottom: 20px;
+}
+
+.password-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    display: none;
+}
+
+.password-form .form-group {
+    margin-bottom: 15px;
+}
+
+.profile-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.no-skills {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-email {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+/* Подвал */
+.full-width-footer {
+    background-color: #333;
+    width: 100%;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+/* Скрытие элементов */
+.hidden {
+    display: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    nav {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .steps {
+        grid-template-columns: 1fr;
+    }
+    
+    .forum-header, .skills-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .topic {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .topic-stats {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .filters {
+        flex-direction: column;
+    }
+    
+    .search-box, .category-filter {
+        width: 100%;
+    }
+    
+    .user-profile {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		cursor: pointer;
+	}
+	.user-avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background-color: var(--light-gray);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+	
+	.user-avatar-link,
+	.user-name-link {
+		text-decoration: none;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.user-avatar-link:hover .user-avatar,
+	.user-name-link:hover .user-name {
+		opacity: 0.8; /* Визуальная обратная связь при наведении */
+	}
+	.user-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.avatar-placeholder {
+		font-size: 20px;
+	}
+	.user-name {
+		font-weight: 500;
+		font-size: 16px;
+		color: var(--text-color);
+	}
+	/* Адаптивность */
+@media (max-width: 768px) {
+		.user-profile .user-name {
+			display: none; /* Скрываем имя на маленьких экранах */
+		}
+	}
+}
+
+
+
+@media (max-width: 480px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .topic-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .profile-about textarea {
+        min-height: 150px;
+    }
+}
+
+/* Стили для страницы авторизации */
+.auth-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 40px 0;
+}
+
+.auth-container {
+    max-width: 500px;
+    width: 100%;
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.auth-tab {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    position: relative;
+    transition: var(--transition);
+}
+
+.auth-tab.active {
+    color: var(--primary-color);
+}
+
+.auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.auth-tab:hover {
+    color: var(--primary-color);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.auth-form input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+}
+
+.auth-form button[type="submit"] {
+    margin-top: 10px;
+    width: 100%;
+}

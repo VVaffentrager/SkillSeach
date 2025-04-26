@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль | SkillSearch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">SkillSearch</div>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="skills.html">Навыки</a>
+                <a href="forum.html">Форум</a>
+                <a href="#howItWorks">Как это работает</a>
+                <a href="profile.html" class="auth-btn profile-btn">Профиль</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="profile-section">
+            <div class="container">
+                <div class="profile-header">
+                    <div class="avatar-upload">
+                        <div class="avatar-preview" id="avatarPreview">
+                            <img id="avatarImage" src="" alt="Аватар">
+                            <div class="avatar-placeholder" id="avatarPlaceholder">👤</div>
+                        </div>
+                        <input type="file" id="avatarInput" accept="image/*">
+                        <label for="avatarInput" class="avatar-upload-btn">Изменить фото</label>
+                    </div>
+                    <h1 id="profileName">Иван Иванов</h1>
+                    <p class="profile-email" id="profileEmail">ivan@example.com</p>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-about">
+                        <h2>О себе</h2>
+                        <textarea id="aboutText" placeholder="Расскажите о себе..."></textarea>
+                        <button id="saveAboutBtn" class="secondary-btn">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="full-width-footer">
+            <div class="container">
+                <p>© 2025 SkillSearch. Обмен навыками.</p>
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форум | SkillSearch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">SkillSearch</div>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="forum.html" class="active">Форум</a>
+                <a href="#howItWorks">Как это работает</a>
+                <div class="auth-container">
+                    <a href="#" class="auth-btn" id="showAuthForm">Войти</a>
+                    <a href="profile.html" class="auth-btn profile-btn" style="display: none;">Профиль</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="forum-section">
+            <div class="container">
+                <div class="forum-header">
+                    <h1>Форум SkillSearch</h1>
+                    <button id="createTopicBtn" class="cta-btn">Создать тему</button>
+                </div>
+
+                <div class="forum-categories">
+                    <div class="category active">Все темы</div>
+                    <div class="category">Обучение</div>
+                    <div class="category">Вопросы</div>
+                    <div class="category">Предложения</div>
+                </div>
+
+                <div class="topics-list" id="topicsList">
+                    <!-- Темы будут загружаться через JS -->
+                </div>
+
+                <div class="create-topic-form" id="createTopicForm" style="display: none;">
+                    <h2>Создать новую тему</h2>
+                    <form id="topicForm">
+                        <div class="form-group">
+                            <label for="topicTitle">Название темы</label>
+                            <input type="text" id="topicTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicCategory">Категория</label>
+                            <select id="topicCategory" required>
+                                <option value="learning">Обучение</option>
+                                <option value="questions">Вопросы</option>
+                                <option value="suggestions">Предложения</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicContent">Содержание</label>
+                            <textarea id="topicContent" rows="5" required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="cta-btn">Опубликовать</button>
+                            <button type="button" id="cancelTopicBtn" class="secondary-btn">Отмена</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="full-width-footer">
+            <div class="container">
+                <p>© 2025 SkillSearch. Обмен навыками.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

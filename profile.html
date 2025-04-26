@@ -12,10 +12,9 @@
             <div class="logo">SkillSearch</div>
             <nav>
                 <a href="index.html">Главная</a>
-                <a href="skills.html">Навыки</a>
                 <a href="forum.html">Форум</a>
-                <a href="#howItWorks">Как это работает</a>
-                <a href="profile.html" class="auth-btn profile-btn">Профиль</a>
+                <a href="profile.html" class="auth-btn profile-btn" id="userProfileHeader" style="display: none;">Профиль</a>
+                <button id="authBtn" class="auth-btn" style="display: block;">Войти</button>
             </nav>
         </div>
     </header>
@@ -23,22 +22,32 @@
         <section class="profile-section">
             <div class="container">
                 <div class="profile-header">
+                    <!-- Заглушка для аватара -->
                     <div class="avatar-upload">
                         <div class="avatar-preview" id="avatarPreview">
-                            <img id="avatarImage" src="" alt="Аватар">
+                            <img id="avatarImage" src="" alt="Аватар" style="display: none;">
                             <div class="avatar-placeholder" id="avatarPlaceholder">👤</div>
                         </div>
-                        <input type="file" id="avatarInput" accept="image/*">
-                        <label for="avatarInput" class="avatar-upload-btn">Изменить фото</label>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                        <label for="avatarInput" class="avatar-upload-btn" style="display: none;">Изменить фото</label>
                     </div>
-                    <h1 id="profileName">Иван Иванов</h1>
-                    <p class="profile-email" id="profileEmail">ivan@example.com</p>
+                    <!-- Заглушка для имени -->
+                    <h1 id="profileName">Пользователь не вошел</h1>
+                    <p class="profile-email" id="profileEmail">-</p>
                 </div>
                 <div class="profile-content">
                     <div class="profile-about">
                         <h2>О себе</h2>
-                        <textarea id="aboutText" placeholder="Расскажите о себе..."></textarea>
-                        <button id="saveAboutBtn" class="secondary-btn">Сохранить</button>
+                        <textarea id="aboutText" placeholder="Расскажите о себе..." readonly></textarea>
+                        <button id="saveAboutBtn" class="secondary-btn" style="display: none;">Сохранить</button>
+                    </div>
+                    <div class="profile-settings">
+                        <h2>Настройки безопасности</h2>
+                        <!-- Кнопка теперь ведет на change-password.html -->
+                        <a href="change-password.html" id="changePasswordBtn" class="secondary-btn" style="display: none;">Изменить пароль</a>
+                    </div>
+                    <div class="profile-actions">
+                        <button id="logoutBtn" class="logout-btn" style="display: none;">Выйти</button>
                     </div>
                 </div>
             </div>

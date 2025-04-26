@@ -453,68 +453,22 @@ function checkProtectedPages() {
 document.addEventListener('DOMContentLoaded', async function() {
     await initDatabase();
     checkProtectedPages();
-    
-    // Инициализация форм авторизации
-    const loginTab = document.getElementById('loginTab');
-    const registerTab = document.getElementById('registerTab');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    
-    if (loginTab && registerTab) {
-        loginTab.addEventListener('click', showLoginForm);
-        registerTab.addEventListener('click', showRegisterForm);
-    }
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLoginSubmit);
-    }
-    
-    if (registerForm) {
-        registerForm.addEventListener('submit', handleRegisterSubmit);
-    }
-
-    // Инициализация кнопки входа в других местах
-    const showAuthFormBtn = document.getElementById('showAuthForm');
-    if (showAuthFormBtn) {
-        showAuthFormBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            redirectToAuthPage();
-        });
-    }
-
-    // Инициализация профиля
-    const avatarInput = document.getElementById('avatarInput');
-    if (avatarInput) {
-        avatarInput.addEventListener('change', handleAvatarUpload);
-    }
-
-    const saveAboutBtn = document.getElementById('saveAboutBtn');
-    if (saveAboutBtn) {
-        saveAboutBtn.addEventListener('click', saveAboutInfo);
-    }
-
-    const addSkillBtn = document.getElementById('addSkillBtn');
-    if (addSkillBtn) {
-        addSkillBtn.addEventListener('click', addUserSkill);
-    }
-
-    const newSkillInput = document.getElementById('newSkillInput');
-    if (newSkillInput) {
-        newSkillInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addUserSkill();
-        });
-    }
 
     // Проверяем статус авторизации
     checkAuthStatus();
-    loadUserProfile();
-    loadUserSkills();
 
-    const authBtn = document.getElementById('authBtn');
-    if (authBtn) {
-        authBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            redirectToAuthPage();
-        });
+    // Если пользователь авторизован, загружаем его данные
+    if (appState.isAuthenticated) {
+        loadUserProfile();
+        loadUserSkills();
+
+        // Отображаем элементы управления
+        document.getElementById('avatarInput').style.display = 'block';
+        document.getElementById('avatarUploadBtn').style.display = 'block';
+        document.getElementById('saveAboutBtn').style.display = 'block';
+        document.getElementById('newSkillInput').style.display = 'block';
+        document.getElementById('addSkillBtn').style.display = 'block';
+        document.getElementById('changePasswordBtn').style.display = 'block';
+        document.getElementById('logoutBtn').style.display = 'block';
     }
 });

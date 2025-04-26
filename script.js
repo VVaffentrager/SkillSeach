@@ -104,55 +104,78 @@ function initAuthForms() {
     }
 
     // Обработка регистрации
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-
-            // Валидация
-            if (!name || !email || !password || !confirmPassword) {
-                alert('Пожалуйста, заполните все поля');
+    function handleRegisterSubmit(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('registerName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+    
+        // Валидация данных
+        if (!name || !email || !password || !confirmPassword) {
+            alert('Пожалуйста, заполните все поля');
+            return;
+        }
+    
+        if (!validateEmail(email)) {
+            alert('Пожалуйста, введите корректный email');
+            return;
+        }
+    
+        if (password.length < 6) {
+            alert('Пароль должен содержать минимум 6 символов');
+            return;
+        }
+    
+        if (password !== confirmPassword) {
+            alert('Пароли не совпадают');
+            return;
+        }
+    
+        try {
+            // Проверка существования пользователя
+            const checkResult = db.exec(`SELECT * FROM users WHERE email = '${email}'`);
+            if (checkResult[0]?.values.length > 0) {
+                alert('Пользователь с таким email уже существует');
                 return;
             }
-
-            if (password !== confirmPassword) {
-                alert('Пароли не совпадают');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Пароль должен содержать минимум 6 символов');
-                return;
-            }
-
-            try {
-                // Проверяем, есть ли уже пользователь с таким email
-                const checkResult = db.exec(`SELECT * FROM users WHERE email = '${email}'`);
-                if (checkResult[0]?.values.length > 0) {
-                    alert('Пользователь с таким email уже существует');
-                    return;
-                }
-
-                // Регистрация нового пользователя
-                db.run(
-                    "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-                    [name, email, password]
-                );
-
-                // Перенаправление на страницу входа после регистрации
-                alert('Вы успешно зарегистрировались! Теперь войдите в систему');
-                window.location.href = 'auth.html';
-                
-            } catch (error) {
-                console.error('Ошибка регистрации:', error);
-                alert('Произошла ошибка при регистрации');
-            }
-        });
+    
+            // Регистрация нового пользователя
+            db.run(
+                "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+                [name, email, password]
+            );
+            
+            // Перенаправление на страницу входа с сообщением
+            alert('Регистрация прошла успешно! Теперь войдите в систему.');
+            window.location.href = 'auth.html?registered=true';
+    
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            alert('Произошла ошибка при регистрации. Пожалуйста, попробуйте еще раз.');
+        }
     }
+    
+    // Функция валидации email
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+    
+    // Инициализация формы регистрации
+    function initRegisterForm() {
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', handleRegisterSubmit);
+            
+            // Показываем сообщение об успешной регистрации, если есть параметр в URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('registered')) {
+                alert('Регистрация прошла успешно! Теперь войдите в систему.');
+            }
+        }
+    }    
 }
 
 function showLoginForm() {
@@ -278,6 +301,8 @@ function checkAuth() {
 
 document.addEventListener('DOMContentLoaded', async function() {
     await initDatabase();
+    initAuthForms();
+    initRegisterForm(); // Добавляем инициализацию формы регистрации
     
     // Инициализация форм авторизации
     initAuthForms();

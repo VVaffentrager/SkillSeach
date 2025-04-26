@@ -164,22 +164,18 @@ function updateHeaderAvatar(user) {
 function updateAuthUI() {
     const authBtn = document.getElementById('authBtn');
     const userProfile = document.getElementById('userProfileHeader');
-    
+
     if (appState.isAuthenticated) {
-        if (authBtn) authBtn.style.display = 'none';
+        if (authBtn) authBtn.style.display = 'none'; // Скрываем кнопку "Вход"
         if (userProfile) userProfile.style.display = 'flex';
     } else {
-        if (authBtn) authBtn.style.display = 'block';
+        if (authBtn) authBtn.style.display = 'block'; // Показываем кнопку "Вход"
         if (userProfile) userProfile.style.display = 'none';
     }
 }
 
 // Перенаправление на страницу входа
 function redirectToAuthPage() {
-    // Сохраняем URL текущей страницы, если это не страница авторизации
-    if (!window.location.pathname.includes('auth.html')) {
-        appState.returnURL = window.location.href;
-    }
     window.location.href = 'auth.html';
 }
 
@@ -470,5 +466,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.getElementById('addSkillBtn').style.display = 'block';
         document.getElementById('changePasswordBtn').style.display = 'block';
         document.getElementById('logoutBtn').style.display = 'block';
+    }
+    // Обработчик кнопки "Вход"
+    const authBtn = document.getElementById('authBtn');
+    if (authBtn) {
+        authBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Отменяем переход по ссылке
+            redirectToAuthPage(); // Перенаправляем на страницу входа
+        });
     }
 });

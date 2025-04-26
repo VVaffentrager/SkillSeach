@@ -13,9 +13,22 @@
             <nav>
                 <a href="index.html">Главная</a>
                 <a href="forum.html">Форум</a>
-                <a href="profile.html" class="auth-btn profile-btn" id="userProfileHeader" style="display: none;">Профиль</a>
-                <button id="authBtn" class="auth-btn" style="display: block;">Войти</button>
             </nav>
+            <!-- Блок с пользователем + кнопка "Вход" -->
+            <div class="profile-header-right">
+                <div class="user-profile" id="userProfileHeader">
+                    <a href="profile.html" class="user-avatar-link">
+                        <div class="user-avatar">
+                            <img id="headerAvatarImage" src="" alt="Аватар">
+                            <div class="avatar-placeholder">👤</div>
+                        </div>
+                    </a>
+                    <a href="profile.html" class="user-name-link">
+                        <span class="user-name" id="headerUserName">Профиль</span>
+                    </a>
+                </div>
+                <a href="auth.html" class="auth-btn" id="authBtn">Войти</a>
+            </div>
         </div>
     </header>
     <main>

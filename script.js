@@ -270,7 +270,16 @@ function initLoginPage() {
     if (urlParams.has('registered')) {
         showMessage('Регистрация прошла успешно! Теперь войдите в систему', 'success');
     }
+
+    db.run(
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+        [name, email, password]
+    );
+    saveDatabase();
+    saveDatabaseToFile(); // Сохраняем файл на диск
 }
+
+
 
 function initRegisterPage() {
     const registerForm = document.getElementById('registerForm');
@@ -348,6 +357,9 @@ function handleAvatarUpload(e) {
             appState.currentUser.avatar = event.target.result;
             updateAuthUI();
         }
+        
+        saveDatabase();
+        saveDatabaseToFile();
     };
     reader.readAsDataURL(file);
 }
@@ -362,6 +374,51 @@ function saveAboutInfo() {
     );
     appState.currentUser.about = aboutText;
     showMessage('Информация сохранена', 'success');
+}
+
+function saveDatabase() {
+    try {
+        // Экспортируем базу данных в массив байтов
+        const data = db.export();
+        
+        // Создаем Blob из массива байтов
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        
+        // Создаем ссылку для скачивания файла
+        const url = URL.createObjectURL(blob);
+        
+        // Создаем элемент <a> для скачивания
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'database.sqlite'; // Имя файла для сохранения
+        
+        // Программно кликаем по ссылке для скачивания
+        link.click();
+        
+        // Очищаем созданный объект URL
+        URL.revokeObjectURL(url);
+        
+        console.log('База данных успешно сохранена.');
+    } catch (error) {
+        console.error('Ошибка при сохранении базы данных:', error);
+        alert('Не удалось сохранить базу данных. Проверьте консоль.');
+    }
+}
+
+function saveDatabaseToFile() {
+    try {
+        const data = db.export(); // Экспортируем базу данных
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'database.sqlite'; // Имя файла для скачивания
+        link.click();
+        URL.revokeObjectURL(url); // Очищаем объект URL
+    } catch (error) {
+        console.error('Ошибка при сохранении базы данных:', error);
+        alert('Не удалось сохранить базу данных.');
+    }
 }
 
 // Основная инициализация

@@ -162,21 +162,22 @@ function updateHeaderAvatar(user) {
 
 // Обновление UI в зависимости от статуса авторизации
 function updateAuthUI() {
-    const authBtn = document.querySelector('.auth-btn');
-    const profileBtn = document.querySelector('.profile-btn');
-
+    const authBtn = document.getElementById('authBtn');
+    const userProfile = document.getElementById('userProfileHeader');
+    
     if (appState.isAuthenticated) {
-        if (profileBtn) profileBtn.style.display = 'block';
         if (authBtn) authBtn.style.display = 'none';
+        if (userProfile) userProfile.style.display = 'flex';
     } else {
-        if (profileBtn) profileBtn.style.display = 'none';
         if (authBtn) authBtn.style.display = 'block';
+        if (userProfile) userProfile.style.display = 'none';
     }
 }
 
 // Перенаправление на страницу входа
 function redirectToAuthPage() {
-    if (!window.location.href.includes('auth.html')) {
+    // Сохраняем URL текущей страницы, если это не страница авторизации
+    if (!window.location.pathname.includes('auth.html')) {
         appState.returnURL = window.location.href;
     }
     window.location.href = 'auth.html';
@@ -436,9 +437,22 @@ function checkAuthStatus() {
     updateAuthUI();
 }
 
+function checkProtectedPages() {
+    const protectedPages = ['profile.html', 'change-password.html'];
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    if (protectedPages.includes(currentPage) {
+        checkAuthStatus();
+        if (!appState.isAuthenticated) {
+            redirectToAuthPage();
+        }
+    }
+}
+
 // Основная функция при загрузке страницы
 document.addEventListener('DOMContentLoaded', async function() {
     await initDatabase();
+    checkProtectedPages();
     
     // Инициализация форм авторизации
     const loginTab = document.getElementById('loginTab');
@@ -495,4 +509,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     checkAuthStatus();
     loadUserProfile();
     loadUserSkills();
+
+    const authBtn = document.getElementById('authBtn');
+    if (authBtn) {
+        authBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            redirectToAuthPage();
+        });
+    }
 });

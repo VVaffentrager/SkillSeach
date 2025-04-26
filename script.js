@@ -441,7 +441,7 @@ function checkProtectedPages() {
     const protectedPages = ['profile.html', 'change-password.html'];
     const currentPage = window.location.pathname.split('/').pop();
     
-    if (protectedPages.includes(currentPage) {
+    if (protectedPages.includes(currentPage)) {
         checkAuthStatus();
         if (!appState.isAuthenticated) {
             redirectToAuthPage();

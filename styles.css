@@ -1086,9 +1086,9 @@ main {
 
 .auth-container {
     max-width: 500px;
-    width: 100%;
-    background-color: white;
+    margin: 0 auto;
     padding: 40px;
+    background: white;
     border-radius: 8px;
     box-shadow: var(--shadow);
 }
@@ -1129,9 +1129,25 @@ main {
     color: var(--primary-color);
 }
 
+.auth-switch {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-switch a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
 .auth-form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 .auth-form h2 {

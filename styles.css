@@ -144,20 +144,6 @@ nav a:hover {
     color: var(--primary-color);
 }
 
-/* Кнопка "Вход" */
-.auth-btn {
-    padding: 8px 16px;
-    background-color: var(--primary-color);
-    color: white !important;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.auth-btn:hover {
-    background-color: var(--primary-hover);
-}
-
 /* Блок пользователя (справа) */
 .user-header {
     display: flex;
@@ -696,11 +682,6 @@ main {
     font-size: 14px;
 }
 
-.reply-author {
-    font-weight: 500;
-    color: var(--primary-color);
-}
-
 .reply-date {
     color: var(--text-secondary);
 }
@@ -1074,45 +1055,56 @@ main {
         min-height: 150px;
     }
 }
-
-/* Стили для страницы авторизации */
+/* Основные стили для страницы авторизации */
 .auth-section {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 200px);
-    padding: 40px 0;
+    min-height: calc(100vh - 120px);
+    padding: 40px 20px;
+    background-color: var(--light-gray);
 }
 
 .auth-container {
+    width: 100%;
     max-width: 500px;
-    margin: 0 auto;
-    padding: 40px;
-    background: white;
-    border-radius: 8px;
+    background-color: white;
+    border-radius: 12px;
     box-shadow: var(--shadow);
+    overflow: hidden;
 }
 
+/* Заголовок */
+.auth-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--text-color);
+    font-size: 28px;
+}
+
+/* Вкладки (вход/регистрация) */
 .auth-tabs {
     display: flex;
-    margin-bottom: 30px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .auth-tab {
-    padding: 10px 20px;
+    flex: 1;
+    padding: 15px;
+    text-align: center;
     background: none;
     border: none;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
     color: var(--text-secondary);
-    position: relative;
     transition: var(--transition);
+    position: relative;
 }
 
 .auth-tab.active {
     color: var(--primary-color);
+    font-weight: 600;
 }
 
 .auth-tab.active::after {
@@ -1121,17 +1113,76 @@ main {
     bottom: -1px;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 3px;
     background-color: var(--primary-color);
 }
 
-.auth-tab:hover {
-    color: var(--primary-color);
+.auth-tab:hover:not(.active) {
+    background-color: rgba(74, 107, 255, 0.05);
 }
 
+/* Формы */
+.auth-form {
+    padding: 30px;
+}
+
+.auth-form h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+}
+
+/* Кнопка отправки */
+.auth-form button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.auth-form button[type="submit"]:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Ссылка переключения между формами */
 .auth-switch {
     text-align: center;
     margin-top: 20px;
+    color: var(--text-secondary);
 }
 
 .auth-switch a {
@@ -1144,43 +1195,37 @@ main {
     text-decoration: underline;
 }
 
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Сообщения об ошибках */
+.error-message {
+    color: var(--danger-color);
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
 }
 
-.auth-form h2 {
-    margin-bottom: 20px;
-    text-align: center;
+/* Адаптивность */
+@media (max-width: 600px) {
+    .auth-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    .auth-form {
+        padding: 25px 20px;
+    }
+    
+    .auth-tab {
+        padding: 12px;
+        font-size: 15px;
+    }
 }
 
-.auth-form .form-group {
-    margin-bottom: 20px;
-}
-
-.auth-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.auth-form input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 16px;
-    transition: var(--transition);
-}
-
-.auth-form input:focus {
-    border-color: var(--primary-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
-}
-
-.auth-form button[type="submit"] {
-    margin-top: 10px;
-    width: 100%;
+@media (max-width: 400px) {
+    .auth-section {
+        padding: 20px 10px;
+    }
+    
+    .auth-container h1 {
+        font-size: 24px;
+    }
 }

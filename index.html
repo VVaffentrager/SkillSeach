@@ -19,8 +19,18 @@
                 <a href="index.html">Главная</a>
                 <a href="forum.html">Форум</a>
                 <a href="#howItWorks">Как это работает</a>
-                <a href="#" class="auth-btn" id="showAuthForm">Войти</a>
             </nav>
+            <div class="user-profile" id="userProfileHeader">
+                <a href="profile.html" class="user-avatar-link">
+                    <div class="user-avatar">
+                        <img id="headerAvatarImage" src="" alt="Аватар">
+                        <div class="avatar-placeholder">👤</div>
+                    </div>
+                </a>
+                <a href="profile.html" class="user-name-link">
+                    <span class="user-name" id="headerUserName">Профиль</span>
+                </a>
+            </div>
         </div>
     </header>
     <main>
@@ -34,6 +44,42 @@
             </div>
         </section>
     </main>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Обменивайтесь навыками бесплатно</h1>
+                <p>Находите людей для обмена знаниями и умениями</p>
+                <div class="hero-buttons">
+                    <a href="forum.html" class="cta-btn">Перейти на форум</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works" id="howItWorks">
+            <div class="container">
+                <h2>Как это работает</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Найдите нужный навык</h3>
+                        <p>Ищите людей, которые могут научить тому, что вам нужно</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Предложите свой навык</h3>
+                        <p>Добавьте в профиль то, чем можете поделиться с другими</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Договоритесь о встрече</h3>
+                        <p>Свяжитесь с человеком и договоритесь об обмене</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer>
         <div class="full-width-footer">
             <div class="container">
@@ -41,11 +87,6 @@
             </div>
         </div>
     </footer>
-    <script>
-        window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
-    </script>
-    <!-- Подключение sql.js через CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     <!-- Подключение script.js с модулями -->
     <script type="module" src="script.js"></script>
 </body>

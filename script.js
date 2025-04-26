@@ -2,7 +2,7 @@
  * SkillSearch - Основной скрипт приложения
  * Обрабатывает авторизацию, навигацию и функционал профиля
  */
-import initSqlJs from 'sql.js';
+import initSqlJs from 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
 
 // Состояние приложения
 const appState = {

@@ -102,24 +102,29 @@ header {
     z-index: 100;
 }
 
-.header-container {
+.container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
+/* Логотип */
 .logo {
     font-size: 24px;
     font-weight: 700;
     color: var(--primary-color);
-    text-decoration: none;
+    margin-right: auto; /* Лого остается слева */
 }
 
+/* Навигация */
 nav {
     display: flex;
-    align-items: center;
     gap: 20px;
+    margin-right: auto; /* Навигация посередине */
 }
 
 nav a {
@@ -139,30 +144,32 @@ nav a:hover {
     color: var(--primary-color);
 }
 
+/* Кнопка "Вход" */
 .auth-btn {
     padding: 8px 16px;
     background-color: var(--primary-color);
     color: white !important;
     border-radius: 6px;
     font-weight: 600;
-    text-decoration: none;
     transition: var(--transition);
 }
 
 .auth-btn:hover {
     background-color: var(--primary-hover);
 }
-/* Блок пользователя (аватар + имя) */
-.user-profile {
+
+/* Блок пользователя (справа) */
+.user-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-left: auto; /* Сдвигает вправо */
+    gap: 15px;
+    margin-left: auto; /* Сдвигаем вправо */
 }
 
+/* Аватар пользователя */
 .user-avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: var(--light-gray);
     display: flex;
@@ -177,13 +184,14 @@ nav a:hover {
     object-fit: cover;
 }
 
-.user-avatar .avatar-placeholder {
-    font-size: 18px;
+.avatar-placeholder {
+    font-size: 20px;
 }
 
+/* Имя пользователя */
 .user-name {
     font-weight: 500;
-    font-size: 15px;
+    color: var(--text-color);
 }
 
 /* Основное содержимое */
@@ -941,18 +949,16 @@ main {
 }
 
 /* Адаптивность */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    nav {
-        width: 100%;
-        justify-content: space-between;
+    @media (max-width: 768px) {
+    .container {
         flex-wrap: wrap;
-        gap: 10px;
     }
+    nav {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+    }
+}
     
     .hero h1 {
         font-size: 2rem;
@@ -1045,7 +1051,7 @@ main {
 			display: none; /* Скрываем имя на маленьких экранах */
 		}
 	}
-}
+
 
 
 

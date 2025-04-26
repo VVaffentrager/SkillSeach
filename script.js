@@ -212,6 +212,33 @@ function handleLoginSubmit(e) {
     }
 }
 
+// Обработка входа
+function handleLoginSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+        const result = db.exec(`
+            SELECT * FROM users WHERE email = '${email}' AND password = '${password}'
+        `);
+
+        if (result[0]?.values.length > 0) {
+            const [id, name, email, password, avatar, about] = result[0].values[0];
+            appState.currentUser = { id, name, email, avatar, about };
+            appState.isAuthenticated = true;
+            
+            // Перенаправление на index.html после успешного входа
+            window.location.href = 'index.html';
+        } else {
+            alert('Неверный email или пароль');
+        }
+    } catch (error) {
+        console.error('Ошибка входа:', error);
+        alert('Произошла ошибка при входе');
+    }
+}
+
 // Обработка регистрации
 function handleRegisterSubmit(e) {
     e.preventDefault();
@@ -221,48 +248,22 @@ function handleRegisterSubmit(e) {
     const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
     // Валидация
-    if (!name || !email || !password || !confirmPassword) {
-        alert('Пожалуйста, заполните все поля');
-        return;
-    }
-
     if (password !== confirmPassword) {
         alert('Пароли не совпадают');
         return;
     }
 
-    if (password.length < 6) {
-        alert('Пароль должен содержать минимум 6 символов');
-        return;
-    }
-
     try {
-        // Проверяем, есть ли уже пользователь с таким email
-        const checkResult = db.exec(`SELECT * FROM users WHERE email = '${email}'`);
-        if (checkResult[0]?.values.length > 0) {
-            alert('Пользователь с таким email уже существует');
-            return;
-        }
-
-        // Регистрируем нового пользователя
+        // Регистрация пользователя
         db.run(
             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
             [name, email, password]
         );
 
-        // Получаем ID нового пользователя
-        const result = db.exec("SELECT last_insert_rowid() as id");
-        const userId = result[0]?.values[0][0];
-
-        if (userId) {
-            appState.currentUser = { id: userId, name, email };
-            appState.isAuthenticated = true;
-            alert('Вы успешно зарегистрировались!');
-            const returnURL = appState.returnURL || 'index.html';
-            window.location.href = returnURL;
-        } else {
-            throw new Error('Не удалось получить ID нового пользователя');
-        }
+        // Перенаправление на страницу входа после регистрации
+        alert('Регистрация успешна! Теперь войдите в систему');
+        window.location.href = 'auth.html';
+        
     } catch (error) {
         console.error('Ошибка регистрации:', error);
         alert('Произошла ошибка при регистрации');
@@ -409,13 +410,14 @@ function renderUserSkills(skills) {
 }
 
 // Проверка статуса авторизации
-function checkAuthStatus() {
-    if (!appState.currentUser?.id) {
-        appState.isAuthenticated = false;
-        appState.currentUser = null;
-        updateAuthUI();
-        return;
+function checkAuth() {
+    if (!appState.isAuthenticated && window.location.pathname.includes('profile.html')) {
+        window.location.href = 'auth.html';
     }
+}
+
+// Вызывать при загрузке каждой страницы
+document.addEventListener('DOMContentLoaded', checkAuth);
 
     const result = db.exec(
         "SELECT * FROM users WHERE id = ?",
@@ -431,7 +433,7 @@ function checkAuthStatus() {
         appState.currentUser = null;
     }
     updateAuthUI();
-}
+
 
 function checkProtectedPages() {
     const protectedPages = ['profile.html', 'change-password.html'];
@@ -450,6 +452,40 @@ document.addEventListener('DOMContentLoaded', async function() {
     await initDatabase();
     checkProtectedPages();
 
+    // Переключение между вкладками
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    if (loginTab && registerTab) {
+        loginTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        });
+
+        registerTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.style.display = 'block';
+            loginForm.style.display = 'none';
+        });
+    }
+
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLoginSubmit);
+    }
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegisterSubmit);
+    }
+
+    
     // Проверяем статус авторизации
     checkAuthStatus();
 

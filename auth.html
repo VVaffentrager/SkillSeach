@@ -1,37 +1,67 @@
-<div class="auth-container">
-    <h1>Вход в SkillSearch</h1>
-    <form id="loginForm" class="auth-form">
-        <div class="form-group">
-            <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" required placeholder="Ваш email">
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | SkillSearch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">SkillSearch</div>
         </div>
-        <div class="form-group">
-            <label for="loginPassword">Пароль</label>
-            <input type="password" id="loginPassword" required placeholder="Ваш пароль">
+    </header>
+    <main>
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-container">
+                    <h1>Вход в SkillSearch</h1>
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required placeholder="Ваш email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Пароль</label>
+                            <input type="password" id="loginPassword" required placeholder="Ваш пароль">
+                        </div>
+                        <button type="submit" class="cta-btn">Войти</button>
+                        <p class="auth-switch">Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+                    </form>
+                
+                    <form id="registerForm" class="auth-form" style="display:none;">
+                        <h2>Регистрация</h2>
+                        <div class="form-group">
+                            <label for="registerName">Имя</label>
+                            <input type="text" id="registerName" required placeholder="Ваше имя">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required placeholder="Ваш email">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Пароль</label>
+                            <input type="password" id="registerPassword" required minlength="6" placeholder="Не менее 6 символов">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">Подтвердите пароль</label>
+                            <input type="password" id="registerConfirmPassword" required placeholder="Повторите пароль">
+                        </div>
+                        <button type="submit" class="cta-btn">Зарегистрироваться</button>
+                        <p class="auth-switch">Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="full-width-footer">
+            <div class="container">
+                <p>© 2025 SkillSearch. Обмен навыками.</p>
+            </div>
         </div>
-        <button type="submit" class="cta-btn">Войти</button>
-        <p class="auth-switch">Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
-    </form>
-
-    <form id="registerForm" class="auth-form" style="display:none;">
-        <h2>Регистрация</h2>
-        <div class="form-group">
-            <label for="registerName">Имя</label>
-            <input type="text" id="registerName" required placeholder="Ваше имя">
-        </div>
-        <div class="form-group">
-            <label for="registerEmail">Email</label>
-            <input type="email" id="registerEmail" required placeholder="Ваш email">
-        </div>
-        <div class="form-group">
-            <label for="registerPassword">Пароль</label>
-            <input type="password" id="registerPassword" required minlength="6" placeholder="Не менее 6 символов">
-        </div>
-        <div class="form-group">
-            <label for="registerConfirmPassword">Подтвердите пароль</label>
-            <input type="password" id="registerConfirmPassword" required placeholder="Повторите пароль">
-        </div>
-        <button type="submit" class="cta-btn">Зарегистрироваться</button>
-        <p class="auth-switch">Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
-    </form>
-</div>
+    </footer>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -66,6 +66,12 @@
         </div>
     </footer>
 
+    <script>
+        window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
+    </script>
+    <!-- Подключение sql.js через CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <!-- Подключение script.js с модулями -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Вход в SkillSearch - войдите в свой аккаунт для обмена навыками.">
-    <meta name="keywords" content="вход, аккаунт, SkillSearch, обмен навыками">
     <title>Вход | SkillSearch</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,18 +18,19 @@
             <div class="auth-container">
                 <h1>Вход в SkillSearch</h1>
                 
-                <form id="loginForm">
+                <form id="loginForm" class="auth-form">
                     <div class="form-group">
                         <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" required>
+                        <input type="email" id="loginEmail" required placeholder="Ваш email">
                         <div id="loginEmailError" class="error-message hidden"></div>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Пароль</label>
-                        <input type="password" id="loginPassword" required>
+                        <input type="password" id="loginPassword" required placeholder="Ваш пароль">
                         <div id="loginPasswordError" class="error-message hidden"></div>
                     </div>
                     <button type="submit" class="cta-btn">Войти</button>
+                    <p class="auth-switch">Нет аккаунта? <a href="register.html" class="switch-link">Зарегистрироваться</a></p>
                 </form>
             </div>
         </section>
@@ -42,11 +41,5 @@
             <p>© 2025 SkillSearch. Обмен навыками.</p>
         </div>
     </footer>
-
-    <script>
-        window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
-    <script type="module" src="script.js"></script>
 </body>
 </html>

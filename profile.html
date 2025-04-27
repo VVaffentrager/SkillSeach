@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Профиль пользователя SkillSearch - управление данными аккаунта.">
+    <meta name="keywords" content="профиль, аккаунт, SkillSearch, управление, настройки">
     <title>Мой профиль | SkillSearch</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,6 +22,7 @@
             </div>
         </div>
     </header>
+
     <main>
         <section class="profile-section">
             <div class="container">
@@ -31,23 +34,17 @@
                             <div class="avatar-placeholder" id="avatarPlaceholder">👤</div>
                         </div>
                         <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                        <label for="avatarInput" class="avatar-upload-btn" style="display: none;">Изменить фото</label>
+                        <label for="avatarInput" class="avatar-upload-btn">Изменить фото</label>
                     </div>
-                    <!-- Заглушка для имени -->
-                    <h1 id="profileName">Пользователь не вошел</h1>
-                    <p class="profile-email" id="profileEmail">-</p>
-                </div>
-                <div class="profile-content">
-                    <div class="profile-about">
-                        <h2>О себе</h2>
-                        <textarea id="aboutText" placeholder="Расскажите о себе..." readonly></textarea>
-                        <button id="saveAboutBtn" class="secondary-btn" style="display: none;">Сохранить</button>
-                    </div>
-                    <div class="profile-settings">
+                    <textarea id="aboutText" placeholder="Расскажите о себе..."></textarea>
+                    <button id="saveAboutBtn" class="secondary-btn">Сохранить</button>
+                        <button id="editAboutBtn" class="secondary-btn" style="display: none;">Редактировать</button>
+                    </article>
+                    <article class="profile-settings">
                         <h2>Настройки безопасности</h2>
                         <!-- Кнопка теперь ведет на change-password.html -->
                         <a href="change-password.html" id="changePasswordBtn" class="secondary-btn" style="display: none;">Изменить пароль</a>
-                    </div>
+                    </article>
                     <div class="profile-actions">
                         <button id="logoutBtn" class="logout-btn" style="display: none;">Выйти</button>
                     </div>
@@ -55,6 +52,7 @@
             </div>
         </section>
     </main>
+
     <footer>
         <div class="full-width-footer">
             <div class="container">
@@ -62,6 +60,7 @@
             </div>
         </div>
     </footer>
+
     <script>
         window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
     </script>

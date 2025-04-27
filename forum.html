@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Форум SkillSearch - обсуждение навыков, вопросов и предложений.">
+    <meta name="keywords" content="форум, обсуждение, навыки, вопросы, предложения, SkillSearch">
     <title>Форум | SkillSearch</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -16,9 +18,9 @@
             </nav>
             <!-- Блок пользователя (справа) -->
             <div class="user-header">
-                <a href="profile.html" class="user-profile">
+                <a href="profile.html" class="user-profile" aria-label="Профиль пользователя">
                     <div class="user-avatar">
-                        <img id="headerAvatarImage" src="" alt="Аватар">
+                        <img id="headerAvatarImage" src="" alt="Аватар пользователя">
                         <div class="avatar-placeholder">👤</div>
                     </div>
                     <span class="user-name" id="headerUserName">Профиль</span>
@@ -32,46 +34,50 @@
             <div class="container">
                 <div class="forum-header">
                     <h1>Форум SkillSearch</h1>
-                    <button id="createTopicBtn" class="cta-btn">Создать тему</button>
+                    <button id="createTopicBtn" class="cta-btn" aria-label="Создать новую тему">Создать тему</button>
                 </div>
 
                 <div class="forum-categories">
-                    <div class="category active">Все темы</div>
-                    <div class="category">Обучение</div>
-                    <div class="category">Вопросы</div>
-                    <div class="category">Предложения</div>
+                    <button class="category active" aria-label="Фильтр: Все темы">Все темы</button>
+                    <button class="category" aria-label="Фильтр: Обучение">Обучение</button>
+                    <button class="category" aria-label="Фильтр: Вопросы">Вопросы</button>
+                    <button class="category" aria-label="Фильтр: Предложения">Предложения</button>
                 </div>
 
                 <div class="topics-list" id="topicsList">
                     <!-- Темы будут загружаться через JS -->
                 </div>
 
-                <div class="create-topic-form" id="createTopicForm" style="display: none;">
+                <article class="create-topic-form" id="createTopicForm" style="display: none;">
                     <h2>Создать новую тему</h2>
-                    <form id="topicForm">
+                    <form id="topicForm" aria-label="Форма создания темы">
                         <div class="form-group">
                             <label for="topicTitle">Название темы</label>
-                            <input type="text" id="topicTitle" required>
+                            <input type="text" id="topicTitle" required placeholder="Введите название темы" aria-describedby="topicTitleError">
+                            <div id="topicTitleError" class="error-message hidden"></div>
                         </div>
                         <div class="form-group">
                             <label for="topicCategory">Категория</label>
-                            <select id="topicCategory" required>
+                            <select id="topicCategory" required aria-describedby="topicCategoryError">
+                                <option value="">Выберите категорию</option>
                                 <option value="learning">Обучение</option>
                                 <option value="questions">Вопросы</option>
                                 <option value="suggestions">Предложения</option>
                                 <option value="other">Другое</option>
                             </select>
+                            <div id="topicCategoryError" class="error-message hidden"></div>
                         </div>
                         <div class="form-group">
                             <label for="topicContent">Содержание</label>
-                            <textarea id="topicContent" rows="5" required></textarea>
+                            <textarea id="topicContent" rows="5" required placeholder="Введите содержание темы" aria-describedby="topicContentError"></textarea>
+                            <div id="topicContentError" class="error-message hidden"></div>
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="cta-btn">Опубликовать</button>
                             <button type="button" id="cancelTopicBtn" class="secondary-btn">Отмена</button>
                         </div>
                     </form>
-                </div>
+                </article>
             </div>
         </section>
     </main>

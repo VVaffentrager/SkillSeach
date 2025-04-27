@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Регистрация в SkillSearch - создайте аккаунт для обмена навыками.">
+    <meta name="keywords" content="регистрация, аккаунт, SkillSearch, обмен навыками">
     <title>Регистрация | SkillSearch</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,25 +20,28 @@
             <div class="auth-container">
                 <h1>Регистрация в SkillSearch</h1>
                 
-                <form id="registerForm" class="auth-form">
+                <form id="registerForm">
                     <div class="form-group">
                         <label for="registerName">Имя</label>
-                        <input type="text" id="registerName" required placeholder="Ваше имя">
+                        <input type="text" id="registerName" required>
+                        <div id="registerNameError" class="error-message hidden"></div>
                     </div>
                     <div class="form-group">
                         <label for="registerEmail">Email</label>
-                        <input type="email" id="registerEmail" required placeholder="Ваш email">
+                        <input type="email" id="registerEmail" required>
+                        <div id="registerEmailError" class="error-message hidden"></div>
                     </div>
                     <div class="form-group">
                         <label for="registerPassword">Пароль</label>
-                        <input type="password" id="registerPassword" required minlength="6" placeholder="Не менее 6 символов">
+                        <input type="password" id="registerPassword" required minlength="6">
+                        <div id="registerPasswordError" class="error-message hidden"></div>
                     </div>
                     <div class="form-group">
                         <label for="registerConfirmPassword">Подтвердите пароль</label>
-                        <input type="password" id="registerConfirmPassword" required placeholder="Повторите пароль">
+                        <input type="password" id="registerConfirmPassword" required>
+                        <div id="registerConfirmError" class="error-message hidden"></div>
                     </div>
                     <button type="submit" class="cta-btn">Зарегистрироваться</button>
-                    <p class="auth-switch">Уже есть аккаунт? <a href="login.html">Войти</a></p>
                 </form>
             </div>
         </section>

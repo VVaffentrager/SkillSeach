@@ -1,26 +1,26 @@
-/**
- * SkillSearch - Полный скрипт приложения
- * Обрабатывает авторизацию, регистрацию и управление профилем
- */
 import { initSqlJs } from 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
 
 // Состояние приложения
 const appState = {
     isAuthenticated: false,
     currentUser: null,
-    skills: [],
-    forumTopics: [],
-    returnURL: null
+    db: null,
 };
 
 // Инициализация базы данных
-let db;
-
 async function initDatabase() {
     try {
         const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` });
-        db = new SQL.Database();
-        
+        const savedDb = localStorage.getItem('database');
+        let db;
+
+        if (savedDb) {
+            const uint8Array = new Uint8Array(JSON.parse(savedDb));
+            db = new SQL.Database(uint8Array);
+        } else {
+            db = new SQL.Database();
+        }
+
         // Создаем таблицы
         db.run(`
             CREATE TABLE IF NOT EXISTS users (
@@ -32,7 +32,19 @@ async function initDatabase() {
                 about TEXT
             );
         `);
-        
+
+        db.run(`
+            CREATE TABLE IF NOT EXISTS forum_topics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                author_id INTEGER,
+                category TEXT,
+                content TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (author_id) REFERENCES users(id)
+            );
+        `);
+
         // Добавляем тестового пользователя
         const result = db.exec("SELECT COUNT(*) as count FROM users");
         if (result[0]?.values[0][0] === 0) {
@@ -41,51 +53,54 @@ async function initDatabase() {
                 ["Yaeko", "yaekohoshiro@gmail.com", "AA528367_22qq"]
             );
         }
+
+        appState.db = db;
+        console.log('База данных инициализирована.');
     } catch (error) {
         console.error('Ошибка инициализации базы данных:', error);
-        showMessage('Не удалось загрузить базу данных', 'error');
+        alert('Не удалось загрузить базу данных.');
     }
 }
 
-// ======================
-// ФУНКЦИИ АВТОРИЗАЦИИ
-// ======================
+// Сохранение базы данных в localStorage
+function saveDatabase() {
+    if (!appState.db) return;
+    try {
+        const data = appState.db.export();
+        const stringData = JSON.stringify(Array.from(data));
+        localStorage.setItem('database', stringData);
+        console.log('База данных сохранена.');
+    } catch (error) {
+        console.error('Ошибка при сохранении базы данных:', error);
+        alert('Не удалось сохранить базу данных.');
+    }
+}
 
+// ЛОГИКА АВТОРИЗАЦИИ
 function handleLoginSubmit(e) {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
 
-    // Валидация
-    if (!validateEmail(email)) {
-        showMessage('Введите корректный email', 'error', 'loginEmailError');
-        return;
-    }
-
-    if (password.length < 6) {
-        showMessage('Пароль должен содержать минимум 6 символов', 'error', 'loginPasswordError');
+    if (!email || !password) {
+        showMessage('Заполните все поля', 'error');
         return;
     }
 
     try {
-        const result = db.exec(
+        const result = appState.db.exec(
             `SELECT * FROM users WHERE email = '${email}' AND password = '${password}'`
         );
 
         if (result[0]?.values.length > 0) {
-            const user = result[0].values[0];
-            loginUser({
-                id: user[0],
-                name: user[1],
-                email: user[2],
-                avatar: user[4],
-                about: user[5]
-            });
-            
-            // Перенаправление на главную
+            const [id, name, email, password, avatar, about] = result[0].values[0];
+            appState.currentUser = { id, name, email, avatar, about };
+            appState.isAuthenticated = true;
+            updateAuthUI();
+            saveSession();
             window.location.href = 'index.html';
         } else {
-            showMessage('Неверные email или пароль', 'error', 'loginFormError');
+            showMessage('Неверные email или пароль', 'error');
         }
     } catch (error) {
         console.error('Ошибка входа:', error);
@@ -100,76 +115,155 @@ function handleRegisterSubmit(e) {
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
-    // Валидация
-    if (!name) {
-        showMessage('Введите имя', 'error', 'registerNameError');
-        return;
-    }
-
-    if (!validateEmail(email)) {
-        showMessage('Введите корректный email', 'error', 'registerEmailError');
-        return;
-    }
-
-    if (password.length < 6) {
-        showMessage('Пароль должен содержать минимум 6 символов', 'error', 'registerPasswordError');
+    if (!name || !email || !password || !confirmPassword) {
+        showMessage('Заполните все поля', 'error');
         return;
     }
 
     if (password !== confirmPassword) {
-        showMessage('Пароли не совпадают', 'error', 'registerConfirmError');
+        showMessage('Пароли не совпадают', 'error');
         return;
     }
 
     try {
-        // Проверка существования пользователя
-        const check = db.exec(`SELECT * FROM users WHERE email = '${email}'`);
+        const check = appState.db.exec(`SELECT * FROM users WHERE email = '${email}'`);
         if (check[0]?.values.length > 0) {
-            showMessage('Пользователь с таким email уже существует', 'error', 'registerEmailError');
+            showMessage('Пользователь с таким email уже существует', 'error');
             return;
         }
 
-        // Регистрация
-        db.run(
+        appState.db.run(
             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
             [name, email, password]
         );
-        
-        // Перенаправление на страницу входа
+
         showMessage('Регистрация успешна! Теперь войдите в систему', 'success');
         setTimeout(() => {
             window.location.href = 'login.html?registered=true';
         }, 1500);
-        
     } catch (error) {
         console.error('Ошибка регистрации:', error);
         showMessage('Ошибка при регистрации', 'error');
     }
 }
 
-function loginUser(user) {
-    appState.currentUser = user;
-    appState.isAuthenticated = true;
-    updateAuthUI();
-    saveSession();
+// УПРАВЛЕНИЕ ПРОФИЛЕМ
+function loadProfileData() {
+    if (!appState.isAuthenticated || !appState.currentUser?.id) return;
+
+    const result = appState.db.exec(`SELECT * FROM users WHERE id = ${appState.currentUser.id}`);
+    if (result[0]?.values.length > 0) {
+        const [id, name, email, password, avatar, about] = result[0].values[0];
+        appState.currentUser = { id, name, email, avatar, about };
+        updateProfileUI();
+    }
 }
 
-function logoutUser() {
-    appState.currentUser = null;
-    appState.isAuthenticated = false;
-    clearSession();
-    window.location.href = 'login.html';
+function updateProfileUI() {
+    if (!appState.currentUser) return;
+
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const aboutText = document.getElementById('aboutText');
+    const avatarImage = document.getElementById('avatarImage');
+    const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+    if (profileName) profileName.textContent = appState.currentUser.name || 'Пользователь';
+    if (profileEmail) profileEmail.textContent = appState.currentUser.email;
+    if (aboutText && appState.currentUser.about) aboutText.value = appState.currentUser.about;
+    if (appState.currentUser.avatar) {
+        if (avatarImage) {
+            avatarImage.src = appState.currentUser.avatar;
+            avatarImage.style.display = 'block';
+        }
+        if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+    }
 }
 
-// ======================
+function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const avatarImage = document.getElementById('avatarImage');
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+        if (avatarImage) {
+            avatarImage.src = event.target.result;
+            avatarImage.style.display = 'block';
+        }
+        if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+
+        if (appState.currentUser) {
+            appState.db.run(
+                "UPDATE users SET avatar = ? WHERE id = ?",
+                [event.target.result, appState.currentUser.id]
+            );
+            appState.currentUser.avatar = event.target.result;
+            updateAuthUI();
+        }
+
+        saveDatabase();
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function saveAboutInfo() {
+    const aboutText = document.getElementById('aboutText')?.value;
+    if (!appState.currentUser || !aboutText) return;
+
+    appState.db.run(
+        "UPDATE users SET about = ? WHERE id = ?",
+        [aboutText, appState.currentUser.id]
+    );
+
+    appState.currentUser.about = aboutText;
+    showMessage('Информация сохранена', 'success');
+    saveDatabase();
+}
+
+// ФОРУМ
+function createForumTopic(title, category, content) {
+    if (!appState.isAuthenticated) {
+        showMessage('Для создания темы необходимо войти', 'error');
+        return;
+    }
+
+    try {
+        appState.db.run(
+            "INSERT INTO forum_topics (title, author_id, category, content) VALUES (?, ?, ?, ?)",
+            [title, appState.currentUser.id, category, content]
+        );
+
+        showMessage('Тема успешно создана', 'success');
+        saveDatabase();
+    } catch (error) {
+        console.error('Ошибка создания темы:', error);
+        showMessage('Не удалось создать тему', 'error');
+    }
+}
+
+function getForumTopics() {
+    try {
+        const result = appState.db.exec("SELECT * FROM forum_topics ORDER BY created_at DESC");
+        return result[0]?.values.map(row => ({
+            id: row[0],
+            title: row[1],
+            authorId: row[2],
+            category: row[3],
+            content: row[4],
+            createdAt: row[5],
+        })) || [];
+    } catch (error) {
+        console.error('Ошибка получения тем форума:', error);
+        showMessage('Не удалось загрузить темы форума', 'error');
+        return [];
+    }
+}
+
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// ======================
-
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
 function showMessage(message, type = 'info', elementId = null) {
     if (elementId) {
         const element = document.getElementById(elementId);
@@ -180,13 +274,12 @@ function showMessage(message, type = 'info', elementId = null) {
             return;
         }
     }
-    
-    // Создаем временное сообщение
+
     const msgElement = document.createElement('div');
     msgElement.className = `global-message ${type}`;
     msgElement.textContent = message;
     document.body.appendChild(msgElement);
-    
+
     setTimeout(() => {
         msgElement.remove();
     }, 3000);
@@ -214,39 +307,27 @@ function loadSession() {
     }
 }
 
-function checkProtectedPages() {
-    const protectedPages = ['profile.html', 'change-password.html'];
-    const currentPage = window.location.pathname.split('/').pop();
-    
-    if (protectedPages.includes(currentPage) && !appState.isAuthenticated) {
-        window.location.href = 'login.html';
-    }
-}
-
 function updateAuthUI() {
     const authBtn = document.getElementById('authBtn');
-    const userProfile = document.getElementById('userProfileHeader');
+    const userProfile = document.querySelector('.user-profile');
     const logoutBtn = document.getElementById('logoutBtn');
 
     if (appState.isAuthenticated) {
         if (authBtn) authBtn.style.display = 'none';
         if (userProfile) userProfile.style.display = 'flex';
         if (logoutBtn) logoutBtn.style.display = 'block';
-        
-        // Обновляем данные пользователя в шапке
-        if (appState.currentUser) {
-            const userName = document.querySelector('.user-name');
-            const avatarImg = document.querySelector('.user-avatar img');
-            const avatarPlaceholder = document.querySelector('.avatar-placeholder');
-            
-            if (userName) userName.textContent = appState.currentUser.name || 'Профиль';
-            if (appState.currentUser.avatar) {
-                if (avatarImg) {
-                    avatarImg.src = appState.currentUser.avatar;
-                    avatarImg.style.display = 'block';
-                }
-                if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+
+        const userName = document.querySelector('.user-name');
+        const avatarImg = document.querySelector('.user-avatar img');
+        const avatarPlaceholder = document.querySelector('.avatar-placeholder');
+
+        if (userName) userName.textContent = appState.currentUser?.name || 'Профиль';
+        if (appState.currentUser?.avatar) {
+            if (avatarImg) {
+                avatarImg.src = appState.currentUser.avatar;
+                avatarImg.style.display = 'block';
             }
+            if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
         }
     } else {
         if (authBtn) authBtn.style.display = 'block';
@@ -255,188 +336,45 @@ function updateAuthUI() {
     }
 }
 
-// ======================
-// ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
-// ======================
-
-function initLoginPage() {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLoginSubmit);
-    }
-    
-    // Показываем сообщение об успешной регистрации, если есть параметр
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('registered')) {
-        showMessage('Регистрация прошла успешно! Теперь войдите в систему', 'success');
-    }
-
-    db.run(
-        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-        [name, email, password]
-    );
-    saveDatabase();
-    saveDatabaseToFile(); // Сохраняем файл на диск
-}
-
-
-
-function initRegisterPage() {
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', handleRegisterSubmit);
-    }
-}
-
-function initProfilePage() {
-    if (!appState.isAuthenticated) return;
-    
-    // Загрузка данных профиля
-    loadProfileData();
-    
-    // Обработчики для профиля
-    document.getElementById('avatarInput')?.addEventListener('change', handleAvatarUpload);
-    document.getElementById('saveAboutBtn')?.addEventListener('click', saveAboutInfo);
-    document.getElementById('logoutBtn')?.addEventListener('click', logoutUser);
-}
-
-function loadProfileData() {
-    if (!appState.currentUser?.id) return;
-
-    const result = db.exec(`SELECT * FROM users WHERE id = ${appState.currentUser.id}`);
-    if (result[0]?.values.length > 0) {
-        const [id, name, email, password, avatar, about] = result[0].values[0];
-        appState.currentUser = { id, name, email, avatar, about };
-        updateProfileUI();
-    }
-}
-
-function updateProfileUI() {
-    if (!appState.currentUser) return;
-    
-    const profileName = document.getElementById('profileName');
-    const profileEmail = document.getElementById('profileEmail');
-    const aboutText = document.getElementById('aboutText');
-    const avatarImage = document.getElementById('avatarImage');
-    const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-    
-    if (profileName) profileName.textContent = appState.currentUser.name || 'Пользователь';
-    if (profileEmail) profileEmail.textContent = appState.currentUser.email;
-    if (aboutText && appState.currentUser.about) aboutText.value = appState.currentUser.about;
-    
-    if (appState.currentUser.avatar) {
-        if (avatarImage) {
-            avatarImage.src = appState.currentUser.avatar;
-            avatarImage.style.display = 'block';
-        }
-        if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
-    }
-}
-
-function handleAvatarUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const avatarImage = document.getElementById('avatarImage');
-        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-
-        if (avatarImage) {
-            avatarImage.src = event.target.result;
-            avatarImage.style.display = 'block';
-        }
-        if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
-
-        // Сохраняем аватар в базе данных
-        if (appState.currentUser) {
-            db.run(
-                "UPDATE users SET avatar = ? WHERE id = ?",
-                [event.target.result, appState.currentUser.id]
-            );
-            appState.currentUser.avatar = event.target.result;
-            updateAuthUI();
-        }
-        
-        saveDatabase();
-        saveDatabaseToFile();
-    };
-    reader.readAsDataURL(file);
-}
-
-function saveAboutInfo() {
-    const aboutText = document.getElementById('aboutText').value;
-    if (!appState.currentUser) return;
-
-    db.run(
-        "UPDATE users SET about = ? WHERE id = ?",
-        [aboutText, appState.currentUser.id]
-    );
-    appState.currentUser.about = aboutText;
-    showMessage('Информация сохранена', 'success');
-}
-
-function saveDatabase() {
-    try {
-        // Экспортируем базу данных в массив байтов
-        const data = db.export();
-        
-        // Создаем Blob из массива байтов
-        const blob = new Blob([data], { type: 'application/octet-stream' });
-        
-        // Создаем ссылку для скачивания файла
-        const url = URL.createObjectURL(blob);
-        
-        // Создаем элемент <a> для скачивания
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'database.sqlite'; // Имя файла для сохранения
-        
-        // Программно кликаем по ссылке для скачивания
-        link.click();
-        
-        // Очищаем созданный объект URL
-        URL.revokeObjectURL(url);
-        
-        console.log('База данных успешно сохранена.');
-    } catch (error) {
-        console.error('Ошибка при сохранении базы данных:', error);
-        alert('Не удалось сохранить базу данных. Проверьте консоль.');
-    }
-}
-
-function saveDatabaseToFile() {
-    try {
-        const data = db.export(); // Экспортируем базу данных
-        const blob = new Blob([data], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'database.sqlite'; // Имя файла для скачивания
-        link.click();
-        URL.revokeObjectURL(url); // Очищаем объект URL
-    } catch (error) {
-        console.error('Ошибка при сохранении базы данных:', error);
-        alert('Не удалось сохранить базу данных.');
-    }
-}
-
-// Основная инициализация
-document.addEventListener('DOMContentLoaded', async function() {
+// ОСНОВНАЯ ИНИЦИАЛИЗАЦИЯ
+document.addEventListener('DOMContentLoaded', async () => {
     await initDatabase();
     loadSession();
-    
-    // Инициализация страниц
-    if (document.getElementById('loginForm')) initLoginPage();
-    if (document.getElementById('registerForm')) initRegisterPage();
-    if (document.getElementById('profileName')) initProfilePage();
-    
-    checkProtectedPages();
+
+    if (document.getElementById('loginForm')) {
+        document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
+    }
+
+    if (document.getElementById('registerForm')) {
+        document.getElementById('registerForm').addEventListener('submit', handleRegisterSubmit);
+    }
+
+    if (document.getElementById('createTopicForm')) {
+        document.getElementById('createTopicForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('topicTitle').value.trim();
+            const category = document.getElementById('topicCategory').value;
+            const content = document.getElementById('topicContent').value.trim();
+            createForumTopic(title, category, content);
+        });
+    }
+
+    if (document.getElementById('avatarInput')) {
+        document.getElementById('avatarInput').addEventListener('change', handleAvatarUpload);
+    }
+
+    if (document.getElementById('saveAboutBtn')) {
+        document.getElementById('saveAboutBtn').addEventListener('click', saveAboutInfo);
+    }
+
+    if (document.getElementById('logoutBtn')) {
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            appState.isAuthenticated = false;
+            appState.currentUser = null;
+            clearSession();
+            window.location.href = 'login.html';
+        });
+    }
+
     updateAuthUI();
-    
-    // Обработчик кнопки "Вход" в шапке
-    document.getElementById('authBtn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.location.href = 'login.html';
-    });
 });

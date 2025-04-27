@@ -11,33 +11,29 @@
         <div class="container">
             <div class="logo">SkillSearch</div>
             <nav>
-                <a href="index.html" class="nav-link">Главная</a>
-                <a href="forum.html" class="nav-link">Форум</a>
+                <a href="index.html">Главная</a>
+                <a href="forum.html">Форум</a>
             </nav>
-            <div class="user-header">
-                <a href="profile.html" class="user-profile">
-                    <div class="user-avatar">
-                        <img id="headerAvatarImage" src="" alt="Аватар пользователя">
-                        <div class="avatar-placeholder">👤</div>
-                    </div>
-                    <span class="user-name" id="headerUserName">Профиль</span>
-                </a>
+            <!-- Блок с пользователем + кнопка "Вход" -->
+            <div class="profile-header-right">
+                <a href="login.html" class="auth-btn" id="authBtn">Войти</a>
             </div>
         </div>
     </header>
-
     <main>
         <section class="profile-section">
             <div class="container">
                 <div class="profile-header">
+                    <!-- Заглушка для аватара -->
                     <div class="avatar-upload">
                         <div class="avatar-preview" id="avatarPreview">
                             <img id="avatarImage" src="" alt="Аватар" style="display: none;">
                             <div class="avatar-placeholder" id="avatarPlaceholder">👤</div>
                         </div>
                         <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                        <label for="avatarInput" class="avatar-upload-btn">Изменить фото</label>
+                        <label for="avatarInput" class="avatar-upload-btn" style="display: none;">Изменить фото</label>
                     </div>
+                    <!-- Заглушка для имени -->
                     <h1 id="profileName">Пользователь не вошел</h1>
                     <p class="profile-email" id="profileEmail">-</p>
                 </div>
@@ -49,6 +45,7 @@
                     </div>
                     <div class="profile-settings">
                         <h2>Настройки безопасности</h2>
+                        <!-- Кнопка теперь ведет на change-password.html -->
                         <a href="change-password.html" id="changePasswordBtn" class="secondary-btn" style="display: none;">Изменить пароль</a>
                     </div>
                     <div class="profile-actions">
@@ -58,7 +55,6 @@
             </div>
         </section>
     </main>
-
     <footer>
         <div class="full-width-footer">
             <div class="container">
@@ -66,5 +62,12 @@
             </div>
         </div>
     </footer>
+    <script>
+        window.SQL = { locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` };
+    </script>
+    <!-- Подключение sql.js через CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <!-- Подключение script.js с модулями -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>

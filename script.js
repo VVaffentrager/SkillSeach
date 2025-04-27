@@ -13,7 +13,6 @@ async function initDatabase() {
         const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` });
         const savedDb = localStorage.getItem('database');
         let db;
-
         if (savedDb) {
             const uint8Array = new Uint8Array(JSON.parse(savedDb));
             db = new SQL.Database(uint8Array);
@@ -171,6 +170,7 @@ function updateProfileUI() {
     if (profileName) profileName.textContent = appState.currentUser.name || 'Пользователь';
     if (profileEmail) profileEmail.textContent = appState.currentUser.email;
     if (aboutText && appState.currentUser.about) aboutText.value = appState.currentUser.about;
+
     if (appState.currentUser.avatar) {
         if (avatarImage) {
             avatarImage.src = appState.currentUser.avatar;
@@ -203,7 +203,6 @@ function handleAvatarUpload(e) {
             appState.currentUser.avatar = event.target.result;
             updateAuthUI();
         }
-
         saveDatabase();
     };
 
@@ -307,6 +306,12 @@ function loadSession() {
     }
 }
 
+function loginUser(user) {
+    appState.currentUser = user;
+    appState.isAuthenticated = true;
+    updateAuthUI();
+}
+
 function updateAuthUI() {
     const authBtn = document.getElementById('authBtn');
     const userProfile = document.querySelector('.user-profile');
@@ -341,14 +346,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initDatabase();
     loadSession();
 
+    // Обработчики событий для страницы входа
     if (document.getElementById('loginForm')) {
         document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
     }
 
+    // Обработчики событий для страницы регистрации
     if (document.getElementById('registerForm')) {
         document.getElementById('registerForm').addEventListener('submit', handleRegisterSubmit);
     }
 
+    // Обработчики событий для формы создания темы форума
     if (document.getElementById('createTopicForm')) {
         document.getElementById('createTopicForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -359,14 +367,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Обработчики событий для загрузки аватара
     if (document.getElementById('avatarInput')) {
         document.getElementById('avatarInput').addEventListener('change', handleAvatarUpload);
     }
 
+    // Обработчик сохранения информации "О себе"
     if (document.getElementById('saveAboutBtn')) {
         document.getElementById('saveAboutBtn').addEventListener('click', saveAboutInfo);
     }
 
+    // Обработчик выхода из системы
     if (document.getElementById('logoutBtn')) {
         document.getElementById('logoutBtn').addEventListener('click', () => {
             appState.isAuthenticated = false;
@@ -376,5 +387,181 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Обновление интерфейса авторизации
     updateAuthUI();
+
+    // Загрузка данных профиля на странице профиля
+    if (window.location.pathname.includes('profile.html')) {
+        loadProfileData();
+    }
+
+    // Загрузка списка тем на странице форума
+    if (window.location.pathname.includes('forum.html')) {
+        loadForumTopics();
+    }
+
+    // Загрузка данных темы на странице темы
+    if (window.location.pathname.includes('topic.html')) {
+        loadTopicData();
+    }
 });
+
+// Загрузка списка тем на форуме
+function loadForumTopics() {
+    const topicsList = document.getElementById('topicsList');
+    if (!topicsList) return;
+
+    const topics = getForumTopics();
+    topicsList.innerHTML = '';
+
+    if (topics.length === 0) {
+        topicsList.innerHTML = '<p class="no-topics">Нет доступных тем</p>';
+        return;
+    }
+
+    topics.forEach(topic => {
+        const topicElement = document.createElement('div');
+        topicElement.className = 'topic';
+        topicElement.innerHTML = `
+            <div class="topic-main">
+                <h3><a href="topic.html?id=${topic.id}">${topic.title}</a></h3>
+                <div class="topic-meta">
+                    <span>Автор: ${getUserNameById(topic.authorId)}</span>
+                    <span>${formatDate(topic.createdAt)}</span>
+                    <span class="topic-category ${getCategoryClass(topic.category)}">${topic.category}</span>
+                </div>
+            </div>
+            <div class="topic-stats">
+                <span>Ответы: ${getReplyCount(topic.id)}</span>
+            </div>
+        `;
+        topicsList.appendChild(topicElement);
+    });
+}
+
+// Получение имени пользователя по ID
+function getUserNameById(userId) {
+    const result = appState.db.exec(`SELECT name FROM users WHERE id = ${userId}`);
+    return result[0]?.values[0][0] || 'Неизвестный пользователь';
+}
+
+// Форматирование даты
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+}
+
+// Получение класса категории для стилизации
+function getCategoryClass(category) {
+    switch (category.toLowerCase()) {
+        case 'обучение':
+            return 'learning';
+        case 'вопросы':
+            return 'questions';
+        case 'предложения':
+            return 'suggestions';
+        default:
+            return '';
+    }
+}
+
+// Получение количества ответов для темы
+function getReplyCount(topicId) {
+    const result = appState.db.exec(`SELECT COUNT(*) as count FROM forum_replies WHERE topic_id = ${topicId}`);
+    return result[0]?.values[0][0] || 0;
+}
+
+// Загрузка данных темы на странице темы
+function loadTopicData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const topicId = urlParams.get('id');
+    if (!topicId) return;
+
+    const result = appState.db.exec(`SELECT * FROM forum_topics WHERE id = ${topicId}`);
+    if (result[0]?.values.length === 0) {
+        showMessage('Тема не найдена', 'error');
+        return;
+    }
+
+    const [id, title, authorId, category, content, createdAt] = result[0].values[0];
+    const topicTitle = document.getElementById('topicTitle');
+    const topicAuthor = document.getElementById('topicAuthor');
+    const topicDate = document.getElementById('topicDate');
+    const topicCategory = document.getElementById('topicCategory');
+    const topicContent = document.getElementById('topicContent');
+
+    if (topicTitle) topicTitle.textContent = title;
+    if (topicAuthor) topicAuthor.textContent = getUserNameById(authorId);
+    if (topicDate) topicDate.textContent = formatDate(createdAt);
+    if (topicCategory) topicCategory.textContent = category;
+    if (topicContent) topicContent.innerHTML = `<p>${content}</p>`;
+
+    loadReplies(topicId);
+}
+
+// Загрузка ответов для темы
+function loadReplies(topicId) {
+    const repliesList = document.getElementById('repliesList');
+    if (!repliesList) return;
+
+    const result = appState.db.exec(`SELECT * FROM forum_replies WHERE topic_id = ${topicId} ORDER BY created_at ASC`);
+    repliesList.innerHTML = '';
+
+    if (result[0]?.values.length === 0) {
+        repliesList.innerHTML = '<p class="no-replies">Нет ответов</p>';
+        return;
+    }
+
+    result[0].values.forEach(reply => {
+        const [id, topicId, authorId, content, createdAt] = reply;
+        const replyElement = document.createElement('div');
+        replyElement.className = 'reply';
+        replyElement.innerHTML = `
+            <div class="reply-header">
+                <span>${getUserNameById(authorId)}</span>
+                <span class="reply-date">${formatDate(createdAt)}</span>
+            </div>
+            <div class="reply-content">${content}</div>
+        `;
+        repliesList.appendChild(replyElement);
+    });
+}
+
+// Создание ответа на тему
+function createReply(topicId, content) {
+    if (!appState.isAuthenticated) {
+        showMessage('Для ответа необходимо войти', 'error');
+        return;
+    }
+
+    try {
+        appState.db.run(
+            "INSERT INTO forum_replies (topic_id, author_id, content) VALUES (?, ?, ?)",
+            [topicId, appState.currentUser.id, content]
+        );
+        showMessage('Ответ успешно добавлен', 'success');
+        saveDatabase();
+        loadReplies(topicId); // Обновляем список ответов
+    } catch (error) {
+        console.error('Ошибка создания ответа:', error);
+        showMessage('Не удалось добавить ответ', 'error');
+    }
+}
+
+// Обработчик отправки формы ответа
+if (document.getElementById('replyForm')) {
+    document.getElementById('replyForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const urlParams = new URLSearchParams(window.location.search);
+        const topicId = urlParams.get('id');
+        const replyContent = document.getElementById('replyContent').value.trim();
+
+        if (!replyContent) {
+            showMessage('Введите текст ответа', 'error');
+            return;
+        }
+
+        createReply(topicId, replyContent);
+        document.getElementById('replyContent').value = ''; // Очищаем поле ввода
+    });
+}
